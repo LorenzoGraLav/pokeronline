@@ -115,6 +115,21 @@ public class Utente {
 		this.esperienzaAccumulata = esperienzaAccumulata;
 		this.creditoAccumulato = creditoAccumulato;
 	}
+	
+	
+
+	public Utente(Long id, String nome, String cognome, String username, String password, StatoUtente stato,
+			Integer esperienzaAccumulata, Double creditoAccumulato) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.username = username;
+		this.password = password;
+		this.stato = stato;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.creditoAccumulato = creditoAccumulato;
+	}
 
 	public Long getId() {
 		return id;
