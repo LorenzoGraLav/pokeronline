@@ -93,6 +93,16 @@ public class Tavolo {
 		this.denominazione = denominazione;
 		this.dataCreazione = dataCreazione;
 	}
+	
+	public Tavolo(Integer esperienzaMinima, Double cifraMinima, String denominazione,
+			LocalDate dataCreazione) {
+		super();
+		this.esperienzaMinima = esperienzaMinima;
+		this.cifraMinima = cifraMinima;
+		this.denominazione = denominazione;
+		this.dataCreazione = dataCreazione;
+	}
+	
 
 	public Tavolo(String denominazione, LocalDate dataCreazione) {
 		super();
