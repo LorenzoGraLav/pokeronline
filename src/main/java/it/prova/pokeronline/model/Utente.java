@@ -32,22 +32,22 @@ public class Utente {
 
 	@Column(name = "cognome")
 	private String cognome;
-	
+
 	@Column(name = "username")
 	private String username;
-	
+
 	@Column(name = "password")
 	private String password;
-	
+
 	@Column(name = "dataregistrazione")
 	private LocalDate dataRegistrazione;
-	
+
 	@Enumerated(EnumType.STRING)
 	private StatoUtente stato;
-	
+
 	@Column(name = "esperienzaaccumulata")
 	private Integer esperienzaAccumulata;
-	
+
 	@Column(name = "creditoaccumulato")
 	private Double creditoAccumulato;
 
@@ -91,8 +91,6 @@ public class Utente {
 		this.username = username;
 		this.password = password;
 	}
-	
-	
 
 	public Utente(String username, String password, String nome, String cognome, LocalDate dataRegistrazione) {
 		super();
@@ -115,11 +113,11 @@ public class Utente {
 		this.esperienzaAccumulata = esperienzaAccumulata;
 		this.creditoAccumulato = creditoAccumulato;
 	}
-	
-	public Utente(String username, String password, String nome, String cognome, LocalDate dataRegistrazione
-			, Integer esperienzaAccumulata, Double creditoAccumulato) {
+
+	public Utente(String username, String password, String nome, String cognome, LocalDate dataRegistrazione,
+			Integer esperienzaAccumulata, Double creditoAccumulato) {
 		super();
-		
+
 		this.username = username;
 		this.password = password;
 		this.nome = nome;
@@ -128,8 +126,6 @@ public class Utente {
 		this.esperienzaAccumulata = esperienzaAccumulata;
 		this.creditoAccumulato = creditoAccumulato;
 	}
-	
-	
 
 	public Utente(Long id, String nome, String cognome, String username, String password, StatoUtente stato,
 			Integer esperienzaAccumulata, Double creditoAccumulato) {
@@ -142,6 +138,16 @@ public class Utente {
 		this.stato = stato;
 		this.esperienzaAccumulata = esperienzaAccumulata;
 		this.creditoAccumulato = creditoAccumulato;
+	}
+
+	public Utente(Long id, String username, String nome, String cognome, LocalDate dataRegistrazione,
+			StatoUtente stato) {
+		this.id = id;
+		this.username = username;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dataRegistrazione = dataRegistrazione;
+		this.stato = stato;
 	}
 
 	public Long getId() {
@@ -223,7 +229,7 @@ public class Utente {
 	public void setRuoli(Set<Ruolo> ruoli) {
 		this.ruoli = ruoli;
 	}
-	
+
 	public boolean isAdmin() {
 		for (Ruolo ruoloItem : ruoli) {
 			if (ruoloItem.getCodice().equals(Ruolo.ROLE_ADMIN))

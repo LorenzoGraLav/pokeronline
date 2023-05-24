@@ -3,7 +3,6 @@ package it.prova.pokeronline.service;
 import java.time.LocalDate;
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,10 +11,19 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.prova.pokeronline.dto.AbbandonaTavoloDTO;
+import it.prova.pokeronline.dto.AnalisiPartitaDTO;
+import it.prova.pokeronline.dto.TavoloDTO;
 import it.prova.pokeronline.model.Ruolo;
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.model.Utente;
 import it.prova.pokeronline.repository.tavolo.TavoloRepository;
+import it.prova.pokeronline.web.api.exception.CreditoInsufficienteException;
+import it.prova.pokeronline.web.api.exception.EsperienzaInsufficienteException;
+import it.prova.pokeronline.web.api.exception.IdNonValidoException;
+import it.prova.pokeronline.web.api.exception.ImpossibileGiocareConCreditoException;
+import it.prova.pokeronline.web.api.exception.NessunTavoloLastGameException;
+import it.prova.pokeronline.web.api.exception.NonPresenteAlTavoloException;
 import it.prova.pokeronline.web.api.exception.OperazioneNegataException;
 
 @Service
@@ -123,6 +131,130 @@ public class TavoloServiceImpl implements TavoloService {
 				PageRequest.of(pageNo, pageSize, Sort.by(sortBy)));
 	}
 
-	
+	@Override
+	@Transactional
+	public TavoloDTO siediAlTavolo(Long idTavolo) {
+		Tavolo tavolo = repository.findById(idTavolo).orElse(null);
+
+		if (tavolo == null)
+			throw new IdNonValidoException();
+
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Utente utenteInSessione = utenteService.findByUsername(username);
+
+		if (tavolo.getGiocatori().contains(utenteInSessione))
+			throw new NonPresenteAlTavoloException();
+
+		if (utenteInSessione.getCreditoAccumulato() < tavolo.getCifraMinima())
+			throw new CreditoInsufficienteException();
+
+		if (utenteInSessione.getEsperienzaAccumulata() < tavolo.getEsperienzaMinima())
+			throw new EsperienzaInsufficienteException();
+
+		tavolo.getGiocatori().add(utenteInSessione);
+
+		return TavoloDTO.buildTavoloDTOFromModel(tavolo, true);
+
+	}
+
+	@Override
+	public AnalisiPartitaDTO iniziaPartita(Long idTavolo) {
+		Tavolo tavolo = repository.findById(idTavolo).orElse(null);
+
+		if (tavolo == null)
+			throw new IdNonValidoException();
+
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Utente utenteInSessione = utenteService.findByUsername(username);
+
+		if (!tavolo.getGiocatori().contains(utenteInSessione))
+			throw new NonPresenteAlTavoloException();
+
+		if (utenteInSessione.getCreditoAccumulato() == null || utenteInSessione.getCreditoAccumulato() == 0d) {
+			throw new ImpossibileGiocareConCreditoException();
+		}
+
+		double segno = Math.random();
+		if (segno < 0.5)
+			segno = segno * -1;
+		int somma = (int) (Math.random() * 500);
+		int totale = (int) (segno * somma);
+
+		Integer esperienzaGuadagnata = 0;
+
+		if (totale > 0) {
+			esperienzaGuadagnata += 5;
+			if (totale > 200)
+				esperienzaGuadagnata += 6;
+			if (totale > 400)
+				esperienzaGuadagnata += 7;
+			if (totale > 499)
+				esperienzaGuadagnata += 8;
+		}
+
+		if (totale <= 0) {
+			esperienzaGuadagnata += 4;
+			if (totale < -200)
+				esperienzaGuadagnata += 3;
+			if (totale < -400)
+				esperienzaGuadagnata += 2;
+			if (totale < -499)
+				esperienzaGuadagnata += 1;
+		}
+
+		utenteInSessione.setEsperienzaAccumulata(esperienzaGuadagnata + utenteInSessione.getEsperienzaAccumulata());
+
+		Double creditoDaInserire = utenteInSessione.getCreditoAccumulato() + totale;
+
+		if (creditoDaInserire < 0) {
+			creditoDaInserire = 0D;
+		}
+
+		utenteInSessione.setCreditoAccumulato(creditoDaInserire);
+
+		AnalisiPartitaDTO result = new AnalisiPartitaDTO(totale, esperienzaGuadagnata);
+
+		return result;
+	}
+
+	@Override
+	public AbbandonaTavoloDTO abbandona(Long idTavolo) {
+		Tavolo tavolo = repository.findById(idTavolo).orElse(null);
+
+		if (tavolo == null)
+			throw new IdNonValidoException();
+
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Utente utenteInSessione = utenteService.findByUsername(username);
+
+		if (!tavolo.getGiocatori().contains(utenteInSessione))
+			throw new NonPresenteAlTavoloException();
+
+		tavolo.getGiocatori().remove(utenteInSessione);
+
+		AbbandonaTavoloDTO result = new AbbandonaTavoloDTO();
+
+		result.setCredito(
+				"Hai abbandonato il tavolo , il tuo credito attuale e'" + utenteInSessione.getCreditoAccumulato());
+		result.setEsperienza(
+				"Hai abbandonato il tavolo , la tua esperienza attuale e'" + utenteInSessione.getEsperienzaAccumulata());
+
+		return result;
+	}
+
+	@Override
+	public TavoloDTO lastGame() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Utente utenteInSessione = utenteService.findByUsername(username);
+		
+		List<Tavolo> tavoliPresenti = (List<Tavolo>) repository.findAll();
+		
+		for (Tavolo tavoloItem : tavoliPresenti) {
+			if(tavoloItem.getGiocatori().contains(utenteInSessione))
+				return TavoloDTO.buildTavoloDTOFromModel(tavoloItem, true);
+		}
+		
+		throw new NessunTavoloLastGameException();
+	}
 
 }

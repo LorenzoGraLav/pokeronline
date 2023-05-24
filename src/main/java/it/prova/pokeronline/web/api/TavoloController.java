@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import it.prova.pokeronline.dto.AbbandonaTavoloDTO;
+import it.prova.pokeronline.dto.AnalisiPartitaDTO;
 import it.prova.pokeronline.dto.TavoloDTO;
 import it.prova.pokeronline.model.Tavolo;
 import it.prova.pokeronline.service.TavoloService;
@@ -33,7 +35,7 @@ public class TavoloController {
 
 	@GetMapping
 	public List<TavoloDTO> getAll() {
-		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.tavoliByUtente());
+		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.tavoliByUtente(), true);
 	}
 
 	@GetMapping("/{id}")
@@ -45,7 +47,7 @@ public class TavoloController {
 			throw new TavoloNotFoundException("Tavolo not found con id: " + id);
 		}
 
-		return TavoloDTO.buildTavoloDTOFromModel(tavolo);
+		return TavoloDTO.buildTavoloDTOFromModel(tavolo, true);
 
 	}
 
@@ -57,10 +59,8 @@ public class TavoloController {
 		}
 
 		Tavolo tavoloInserito = tavoloService.inserisciNuovo(tavoloInput.buildTavoloModel());
-		
-		
 
-		return TavoloDTO.buildTavoloDTOFromModel(tavoloInserito);
+		return TavoloDTO.buildTavoloDTOFromModel(tavoloInserito, true);
 	}
 
 	@PutMapping("/{id}")
@@ -75,7 +75,7 @@ public class TavoloController {
 
 		Tavolo tavoloAggiornato = tavoloService.aggiorna(tavoloInput.buildTavoloModel());
 
-		return TavoloDTO.buildTavoloDTOFromModel(tavoloAggiornato);
+		return TavoloDTO.buildTavoloDTOFromModel(tavoloAggiornato, true);
 	}
 
 	@DeleteMapping("/{id}")
@@ -86,7 +86,7 @@ public class TavoloController {
 
 	@PostMapping("/search")
 	public List<TavoloDTO> search(@RequestBody TavoloDTO example) {
-		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.findByExample(example.buildTavoloModel()));
+		return TavoloDTO.createTavoloDTOListFromModelList(tavoloService.findByExample(example.buildTavoloModel()), true);
 	}
 
 	@PostMapping("/searchNativeWithPagination")
@@ -94,12 +94,34 @@ public class TavoloController {
 			@RequestParam(defaultValue = "0") Integer pageNo, @RequestParam(defaultValue = "0") Integer pageSize,
 			@RequestParam(defaultValue = "id") String sortBy) {
 
-		
-		
 		Page<Tavolo> entityPageResults = tavoloService.findByExampleNativeWithPagination(example.buildTavoloModel(),
 				pageNo, pageSize, sortBy);
 
 		return new ResponseEntity<Page<TavoloDTO>>(TavoloDTO.fromModelPageToDTOPage(entityPageResults), HttpStatus.OK);
+	}
+	
+	
+	
+	@GetMapping("/siediNelTavolo/{id}")
+	public TavoloDTO siediNelTavolo(@PathVariable(required = true) Long id) {
+		return tavoloService.siediAlTavolo(id);
+	}
+
+	@PostMapping("/iniziaPartita/{id}")
+	public AnalisiPartitaDTO giocaNelTavolo(@PathVariable(required = true) Long id) {
+
+		return tavoloService.iniziaPartita(id);
+
+	}
+
+	@GetMapping("/abbandonaIlTavolo/{id}")
+	public AbbandonaTavoloDTO abbandonaIlTavolo(@PathVariable(required = true) Long id) {
+		return tavoloService.abbandona(id);
+	}
+
+	@GetMapping("/lastGame")
+	public TavoloDTO lastGame() {
+		return tavoloService.lastGame();
 	}
 
 }
