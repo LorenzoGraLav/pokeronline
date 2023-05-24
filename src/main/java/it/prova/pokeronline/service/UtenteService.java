@@ -20,11 +20,13 @@ public interface UtenteService {
 
 	public List<Utente> findByExample(Utente example);
 
-	public Utente findByUsernameAndPassword(String username, String password);
+	//public Utente findByUsernameAndPassword(String username, String password);
 
 	public Utente eseguiAccesso(String username, String password);
 
 	public void changeUserAbilitation(Long utenteInstanceId);
 
 	public Utente findByUsername(String username);
+	
+	public void aggiungiCredito(Long id, double creditoDaAggiungere);
 }

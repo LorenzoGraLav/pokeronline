@@ -1,23 +1,42 @@
 package it.prova.pokeronline.repository.tavolo;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.repository.query.Param;
 
 import it.prova.pokeronline.model.Tavolo;
 
-
-
-public interface TavoloRepository  extends CrudRepository<Tavolo, Long>,CustomTavoloRepository{
-	@Query("from Tavolo t join fetch t.utente where t.id = ?1")
+public interface TavoloRepository
+		extends PagingAndSortingRepository<Tavolo, Long>, JpaSpecificationExecutor<Tavolo>, CustomTavoloRepository {
+	@Query("from Tavolo t join fetch t.utenteCreazione where t.id = ?1")
 	Tavolo findSingleTavoloEager(Long id);
-	
+
 	List<Tavolo> findByDenominazione(String denominazione);
-	
-	@Query("select t from Tavolo t join fetch t.utente")
+
+	@Query("select t from Tavolo t join fetch t.utenteCreazione")
 	List<Tavolo> findAllTavoloEager();
-	
-	@Query("from Tavolo t join fetch t.utente u where u.id = ?1")
+
+	@Query("from Tavolo t join fetch t.utenteCreazione u where u.id = ?1")
 	List<Tavolo> tavoliUtente(Long id);
+
+	@Query(value = "SELECT t.* " + "FROM tavolo t "
+			+ "WHERE ((:denominazione IS NULL OR LOWER(t.denominazione) LIKE %:denominazione%)  "
+			+ "AND (:esperienzaminima IS NULL OR t.esperienzaminima > :esperienzaminima) "
+			+ "AND (:ciframinima IS NULL OR t.ciframinima >= :ciframinima) "
+			+ "AND (:datacreazione IS NULL OR t.datacreazione >= :datacreazione)) "
+			+ "ORDER BY t.id ASC", countQuery = "SELECT COUNT(*) " + "FROM tavolo t "
+					+ "WHERE ((:denominazione IS NULL OR LOWER(t.denominazione) LIKE %:denominazione%)  "
+					+ "AND (:esperienzaminima IS NULL OR t.esperienzaminima > :esperienzaminima) "
+					+ "AND (:ciframinima IS NULL OR t.ciframinima >= :ciframinima) "
+					+ "AND (:datacreazione IS NULL OR t.datacreazione >= :datacreazione))", nativeQuery = true)
+	Page<Tavolo> findByExampleNativeWithPagination(@Param("denominazione") String denominazione,
+			@Param("esperienzaminima") Integer esperienzaMinima, @Param("ciframinima") Double cifraMinima,
+			@Param("datacreazione") LocalDate dataCreazione, Pageable pageable);
+
 }

@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,9 +70,9 @@ public class UtenteServiceImpl implements UtenteService {
 		return repository.findByUsernameAndPasswordAndStato(username, password, StatoUtente.ATTIVO);
 	}
 
-	public Utente findByUsernameAndPassword(String username, String password) {
-		return repository.findByUsernameAndPassword(username, password);
-	}
+//	public Utente findByUsernameAndPassword(String username, String password) {
+//		return repository.findByUsernameAndPassword(username, password);
+//	}
 
 	@Transactional
 	public void changeUserAbilitation(Long utenteInstanceId) {
@@ -90,4 +91,18 @@ public class UtenteServiceImpl implements UtenteService {
 	public Utente findByUsername(String username) {
 		return repository.findByUsername(username).orElse(null);
 	}
+
+	@Override
+	public void aggiungiCredito(Long id, double creditoDaAggiungere) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Utente utenteInSessione = repository.findByUsername(username).orElse(null);
+
+		utenteInSessione.setId(id);
+
+		double cifraDaAggiungere = utenteInSessione.getCreditoAccumulato() + creditoDaAggiungere;
+
+		utenteInSessione.setCreditoAccumulato(cifraDaAggiungere);
+
+	}
+
 }

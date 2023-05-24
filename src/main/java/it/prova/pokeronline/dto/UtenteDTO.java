@@ -1,13 +1,12 @@
 package it.prova.pokeronline.dto;
 
 import java.time.LocalDate;
-import java.util.Arrays;
+
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import it.prova.pokeronline.model.Ruolo;
 import it.prova.pokeronline.model.StatoUtente;
 import it.prova.pokeronline.model.Utente;
 
@@ -153,12 +152,10 @@ public class UtenteDTO {
 		this.ruoliIds = ruoliIds;
 	}
 	
-	public Utente buildUtenteModel(boolean includeIdRoles) {
+	public Utente buildUtenteModel() {
 		Utente result = new Utente(this.id, this.nome, this.cognome, this.username, this.password,this.stato, this.esperienzaAccumulata,
 				this.creditoAccumulato);
 
-		if (includeIdRoles && ruoliIds != null)
-			result.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));
 		return result;
 	}
 

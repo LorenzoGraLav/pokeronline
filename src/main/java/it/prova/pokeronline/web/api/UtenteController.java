@@ -1,12 +1,17 @@
 package it.prova.pokeronline.web.api;
 
 import java.util.List;
+
 import java.util.stream.Collectors;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -42,4 +47,12 @@ public class UtenteController {
 		return ResponseEntity.ok(new UtenteInfoJWTResponseDTO(utenteLoggato.getNome(), utenteLoggato.getCognome(),
 				utenteLoggato.getUsername(), ruoli));
 	}
+
+	
+
+	  @PostMapping("/{id}/acquistaCredito")
+	    public ResponseEntity<String> acquistaCredito(@PathVariable Long id, @RequestBody double creditoDaAggiungere) {        utenteService.aggiungiCredito(id, creditoDaAggiungere);
+	        return ResponseEntity.ok("Credito aggiunto con successo");
+	    }
+
 }

@@ -1,10 +1,13 @@
 package it.prova.pokeronline.service;
 
 import java.time.LocalDate;
-
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +19,7 @@ import it.prova.pokeronline.repository.tavolo.TavoloRepository;
 import it.prova.pokeronline.web.api.exception.OperazioneNegataException;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 public class TavoloServiceImpl implements TavoloService {
 	@Autowired
 	private TavoloRepository repository;
@@ -94,6 +97,7 @@ public class TavoloServiceImpl implements TavoloService {
 	}
 
 	@Override
+	@Transactional
 	public void firstInsert() {
 		Tavolo tavoloAdmin = new Tavolo(50, 1000.0, "tavoloAdmin", LocalDate.now());
 
@@ -110,5 +114,15 @@ public class TavoloServiceImpl implements TavoloService {
 		}
 
 	}
+
+	@Override
+	public Page<Tavolo> findByExampleNativeWithPagination(Tavolo example, Integer pageNo, Integer pageSize,
+			String sortBy) {
+		return repository.findByExampleNativeWithPagination(example.getDenominazione(), example.getEsperienzaMinima(),
+				example.getCifraMinima(), example.getDataCreazione(),
+				PageRequest.of(pageNo, pageSize, Sort.by(sortBy)));
+	}
+
+	
 
 }

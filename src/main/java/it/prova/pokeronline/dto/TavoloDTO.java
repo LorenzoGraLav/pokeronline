@@ -8,6 +8,10 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -22,17 +26,21 @@ public class TavoloDTO {
 	private Integer esperienzaMinima;
 
 	private Double cifraMinima;
-	
+
 	@NotBlank(message = "{denominazione.notblank}")
 	private String denominazione;
 
 	private LocalDate dataCreazione;
 
-	@JsonIgnoreProperties(value = { "tavoli"})
+	@JsonIgnoreProperties(value = { "tavoli" })
 	private Set<Utente> giocatori = new HashSet<>(0);
 
-	@JsonIgnoreProperties(value = { "tavolo"})
+	@JsonIgnoreProperties(value = { "tavolo" })
 	private UtenteDTO utenteCreazione;
+
+	public TavoloDTO() {
+
+	}
 
 	public TavoloDTO(Long id, Integer esperienzaMinima, Double cifraMinima,
 			@NotBlank(message = "{denominazione.notblank}") String denominazione, LocalDate dataCreazione,
@@ -67,8 +75,6 @@ public class TavoloDTO {
 		this.denominazione = denominazione;
 		this.dataCreazione = dataCreazione;
 	}
-	
-	
 
 	public TavoloDTO(Long id, Integer esperienzaMinima, Double cifraMinima,
 			@NotBlank(message = "{denominazione.notblank}") String denominazione, LocalDate dataCreazione,
@@ -137,12 +143,15 @@ public class TavoloDTO {
 	public void setUtenteCreazione(UtenteDTO utenteCreazione) {
 		this.utenteCreazione = utenteCreazione;
 	}
-	
-	
-	public Tavolo buildTavoloModel() {
-		Tavolo result = new Tavolo(this.id, this.esperienzaMinima, this.cifraMinima, this.denominazione,this.dataCreazione);
 
-		result.setUtenteCreazione(this.utenteCreazione.buildUtenteModel(true));		
+	public Tavolo buildTavoloModel() {
+
+		Tavolo result = new Tavolo(this.id, this.esperienzaMinima, this.cifraMinima, this.denominazione,
+				this.dataCreazione);
+
+		if (this.utenteCreazione == null)
+			result.setUtenteCreazione(this.utenteCreazione.buildUtenteModel());
+
 		return result;
 	}
 
@@ -153,23 +162,19 @@ public class TavoloDTO {
 
 		return result;
 	}
-	
-	
+
 	public static List<TavoloDTO> createTavoloDTOListFromModelList(List<Tavolo> modelListInput) {
 		return modelListInput.stream().map(agendaEntity -> {
 			return TavoloDTO.buildTavoloDTOFromModel(agendaEntity);
 		}).collect(Collectors.toList());
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	public static Page<TavoloDTO> fromModelPageToDTOPage(Page<Tavolo> input) {
+		return new PageImpl<>(createTavoloDTOListFromModelList(input.getContent()),
+				PageRequest.of(input.getPageable().getPageNumber(), input.getPageable().getPageSize(),
+						input.getPageable().getSort()),
+				input.getTotalElements());
+	}
 	
 	
 	

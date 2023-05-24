@@ -116,6 +116,19 @@ public class Utente {
 		this.creditoAccumulato = creditoAccumulato;
 	}
 	
+	public Utente(String username, String password, String nome, String cognome, LocalDate dataRegistrazione
+			, Integer esperienzaAccumulata, Double creditoAccumulato) {
+		super();
+		
+		this.username = username;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dataRegistrazione = dataRegistrazione;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.creditoAccumulato = creditoAccumulato;
+	}
+	
 	
 
 	public Utente(Long id, String nome, String cognome, String username, String password, StatoUtente stato,
