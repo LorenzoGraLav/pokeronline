@@ -51,7 +51,7 @@ public class TavoloController {
 
 	}
 
-	@PostMapping
+	@PostMapping("/private")
 	@ResponseStatus(HttpStatus.CREATED)
 	public TavoloDTO createNew(@Valid @RequestBody TavoloDTO tavoloInput) {
 		if (tavoloInput.getId() != null) {
@@ -63,7 +63,7 @@ public class TavoloController {
 		return TavoloDTO.buildTavoloDTOFromModel(tavoloInserito, true);
 	}
 
-	@PutMapping("/{id}")
+	@PutMapping("/private/{id}")
 	public TavoloDTO update(@Valid @RequestBody TavoloDTO tavoloInput, @PathVariable(required = true) Long id) {
 		Tavolo tavolo = tavoloService.caricaSingoloElemento(id);
 
@@ -78,7 +78,7 @@ public class TavoloController {
 		return TavoloDTO.buildTavoloDTOFromModel(tavoloAggiornato, true);
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/private/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable(required = true) Long id) {
 		tavoloService.rimuovi(id);

@@ -54,7 +54,7 @@ public class UtenteController {
 				utenteLoggato.getUsername(), ruoli));
 	}
 
-	@PostMapping("/{id}/acquistaCredito")
+	@PostMapping("/autenticato/acquistaCredito")
 	public ResponseEntity<String> acquistaCredito(@PathVariable Long id, @RequestBody double creditoDaAggiungere) {
 		utenteService.aggiungiCredito(id, creditoDaAggiungere);
 		return ResponseEntity.ok("Credito aggiunto con successo");
@@ -93,7 +93,7 @@ public class UtenteController {
 
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/private/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable(required = true) Long id) {
 
@@ -108,6 +108,13 @@ public class UtenteController {
 	@PostMapping("/search")
 	public List<GestioneUtenteDTO> findByExample(@RequestBody GestioneUtenteDTO example) {
 		return utenteService.findByExample(example);
+	}
+	
+	
+
+	@PostMapping("/create")
+	public GestioneUtenteDTO creaUtente(@Valid @RequestBody GestioneUtenteDTO utenteInput) {
+		return utenteService.inserisciNuovo(utenteInput);
 	}
 
 }

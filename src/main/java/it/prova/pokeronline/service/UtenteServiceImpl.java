@@ -109,5 +109,15 @@ public class UtenteServiceImpl implements UtenteService {
 				repository.findByExample(example.buildGestioneUtenteModel(true)));
 	}
 
+	@Override
+	@Transactional
+	public GestioneUtenteDTO inserisciNuovo(GestioneUtenteDTO utenteInstance) {
+
+		utenteInstance.setDataRegistrazione(LocalDate.now());
+		utenteInstance.setStato(StatoUtente.ATTIVO);
+		utenteInstance.setPassword(passwordEncoder.encode(utenteInstance.getPassword()));
+		return GestioneUtenteDTO.buildGestioneUtenteDTOFromModel(repository.save(utenteInstance.buildGestioneUtenteModel(true)));
+	}
+
 
 }
