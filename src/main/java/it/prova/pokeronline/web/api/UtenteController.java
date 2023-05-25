@@ -109,5 +109,17 @@ public class UtenteController {
 	public List<GestioneUtenteDTO> findByExample(@RequestBody GestioneUtenteDTO example) {
 		return utenteService.findByExample(example);
 	}
+	
+	
+//	@PostMapping("/{id}")
+//	public GestioneUtenteDTO abilitaUtente(@PathVariable(value = "id", required = true) long id) {
+//
+//		Utente utente = utenteService.caricaSingoloUtenteConRuoli(id);
+//
+//		if (utente == null)
+//			throw new IdNotNullForInsertException("");
+//		
+//
+//	}
 
 }

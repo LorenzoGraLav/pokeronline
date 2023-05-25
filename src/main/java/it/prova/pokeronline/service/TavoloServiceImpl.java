@@ -257,4 +257,18 @@ public class TavoloServiceImpl implements TavoloService {
 		throw new NessunTavoloLastGameException("Nessun tavolo disponibile!");
 	}
 
-}
+	@Override
+	public List<TavoloDTO> estraiTavoliConUnUtenteAlDiSopraDiSoglia(Integer soglia) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		Utente utenteInSessione = utenteService.findByUsername(username);
+		
+		return TavoloDTO.createTavoloDTOListFromModelList(repository.estraiTavoliConAlmenoUnUtenteAlDiSopraDiSoglia(utenteInSessione.getId(),soglia),true);
+	}
+
+	@Override
+	public TavoloDTO trovaTavoloConEsperienzaMassima() {
+		return TavoloDTO.buildTavoloDTOFromModel(repository.trovaTavoloConMassimaEsperienzaGiocatori(), true);
+	}
+ }
+
+

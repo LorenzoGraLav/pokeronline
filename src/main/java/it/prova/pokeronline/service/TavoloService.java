@@ -41,5 +41,9 @@ public interface TavoloService {
 	
 	public TavoloDTO lastGame();
 	
+	List<TavoloDTO> estraiTavoliConUnUtenteAlDiSopraDiSoglia(Integer soglia);
+	
+	public TavoloDTO trovaTavoloConEsperienzaMassima();
+	
 
 }

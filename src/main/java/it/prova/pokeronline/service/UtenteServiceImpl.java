@@ -109,5 +109,11 @@ public class UtenteServiceImpl implements UtenteService {
 				repository.findByExample(example.buildGestioneUtenteModel(true)));
 	}
 
+//	@Override
+//	public GestioneUtenteDTO abilita(Long idDaAbilitare) {
+//	  Utente utente =  repository.findById(idDaAbilitare).orElse(null);
+//	  return null;
+//	}
+
 
 }

@@ -29,4 +29,6 @@ public interface UtenteService {
 	public Utente findByUsername(String username);
 
 	public void aggiungiCredito(Long id, double creditoDaAggiungere);
+	
+	//public GestioneUtenteDTO abilita(Long idDaAbilitare);
 }

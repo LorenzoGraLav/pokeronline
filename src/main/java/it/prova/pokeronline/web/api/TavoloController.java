@@ -123,5 +123,18 @@ public class TavoloController {
 	public TavoloDTO lastGame() {
 		return tavoloService.lastGame();
 	}
+	
+	@GetMapping("/soglia/{soglia}")
+	public List<TavoloDTO> estraiTavoliConUnUtenteAlDiSopraDiSoglia(@PathVariable Integer soglia) {
+		
+	    return tavoloService.estraiTavoliConUnUtenteAlDiSopraDiSoglia(soglia);
+	    
+	
+	}
+	
+	@GetMapping("/admin/trovaTavoloConMassimaEsperienzaGiocatori")
+	public TavoloDTO trovaTavoloConMassimaEsperienzaGiocatori() {
+		return tavoloService.trovaTavoloConEsperienzaMassima();
+	}
 
 }
