@@ -105,7 +105,7 @@ public class UtenteController {
 
 	}
 	
-	@PostMapping("/seacrh")
+	@PostMapping("/search")
 	public List<GestioneUtenteDTO> findByExample(@RequestBody GestioneUtenteDTO example) {
 		return utenteService.findByExample(example);
 	}

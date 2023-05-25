@@ -137,19 +137,19 @@ public class TavoloServiceImpl implements TavoloService {
 		Tavolo tavolo = repository.findById(idTavolo).orElse(null);
 
 		if (tavolo == null)
-			throw new IdNonValidoException();
+			throw new IdNonValidoException("Non trovo un Id valido!");
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utente utenteInSessione = utenteService.findByUsername(username);
 
 		if (tavolo.getGiocatori().contains(utenteInSessione))
-			throw new NonPresenteAlTavoloException();
+			throw new NonPresenteAlTavoloException("Non puoi sederti in piu tavoli!");
 
 		if (utenteInSessione.getCreditoAccumulato() < tavolo.getCifraMinima())
-			throw new CreditoInsufficienteException();
+			throw new CreditoInsufficienteException("Non hai piu credito disponibile!");
 
 		if (utenteInSessione.getEsperienzaAccumulata() < tavolo.getEsperienzaMinima())
-			throw new EsperienzaInsufficienteException();
+			throw new EsperienzaInsufficienteException("Non hai esperienza sufficiente");
 
 		tavolo.getGiocatori().add(utenteInSessione);
 
@@ -162,16 +162,16 @@ public class TavoloServiceImpl implements TavoloService {
 		Tavolo tavolo = repository.findById(idTavolo).orElse(null);
 
 		if (tavolo == null)
-			throw new IdNonValidoException();
+			throw new IdNonValidoException("Id non trovato!");
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utente utenteInSessione = utenteService.findByUsername(username);
 
 		if (!tavolo.getGiocatori().contains(utenteInSessione))
-			throw new NonPresenteAlTavoloException();
+			throw new NonPresenteAlTavoloException("Non puoi sederti in piu tavoli!");
 
 		if (utenteInSessione.getCreditoAccumulato() == null || utenteInSessione.getCreditoAccumulato() == 0d) {
-			throw new ImpossibileGiocareConCreditoException();
+			throw new ImpossibileGiocareConCreditoException("Non hai credito disponibile!");
 		}
 
 		double segno = Math.random();
@@ -222,13 +222,13 @@ public class TavoloServiceImpl implements TavoloService {
 		Tavolo tavolo = repository.findById(idTavolo).orElse(null);
 
 		if (tavolo == null)
-			throw new IdNonValidoException();
+			throw new IdNonValidoException("Id non valido!");
 
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
 		Utente utenteInSessione = utenteService.findByUsername(username);
 
 		if (!tavolo.getGiocatori().contains(utenteInSessione))
-			throw new NonPresenteAlTavoloException();
+			throw new NonPresenteAlTavoloException("Non sei presente al tavolo!");
 
 		tavolo.getGiocatori().remove(utenteInSessione);
 
@@ -254,7 +254,7 @@ public class TavoloServiceImpl implements TavoloService {
 				return TavoloDTO.buildTavoloDTOFromModel(tavoloItem, true);
 		}
 		
-		throw new NessunTavoloLastGameException();
+		throw new NessunTavoloLastGameException("Nessun tavolo disponibile!");
 	}
 
 }

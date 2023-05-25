@@ -5,8 +5,8 @@ public class NonPresenteAlTavoloException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public NonPresenteAlTavoloException() {
-		super();
+	public NonPresenteAlTavoloException(String message) {
+		super(message);
 	}
 
 }

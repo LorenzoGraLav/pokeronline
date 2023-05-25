@@ -5,8 +5,8 @@ public class CreditoInsufficienteException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public CreditoInsufficienteException() {
-		super();
+	public CreditoInsufficienteException(String message) {
+		super(message);
 	}
 
 }

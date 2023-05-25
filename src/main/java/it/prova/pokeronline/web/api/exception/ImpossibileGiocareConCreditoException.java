@@ -4,8 +4,8 @@ public class ImpossibileGiocareConCreditoException extends RuntimeException {
 
 	private static final long serialVersionUID = 1L;
 	
-	public ImpossibileGiocareConCreditoException() {
-		super();
+	public ImpossibileGiocareConCreditoException(String message) {
+		super(message);
 	}
 
 }

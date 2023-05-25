@@ -71,4 +71,106 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
 	}
+	
+	@ExceptionHandler(CreditoInsufficienteException.class)
+	public ResponseEntity<Object> handleCreditoInsufficienteException(CreditoInsufficienteException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
+	@ExceptionHandler(EsperienzaInsufficienteException.class)
+	public ResponseEntity<Object> handleEsperienzaInsufficienteException(EsperienzaInsufficienteException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
+	@ExceptionHandler(IdNonValidoException.class)
+	public ResponseEntity<Object> handleIdNonValidoException(IdNonValidoException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
+	
+	
+	@ExceptionHandler(ImpossibileGiocareConCreditoException.class)
+	public ResponseEntity<Object> handleImpossibileGiocareConCreditoException(ImpossibileGiocareConCreditoException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
+	
+	
+
+	@ExceptionHandler(NessunTavoloLastGameException.class)
+	public ResponseEntity<Object> handleNessunTavoloLastGameException(NessunTavoloLastGameException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
+
+
+	@ExceptionHandler(NonPresenteAlTavoloException.class)
+	public ResponseEntity<Object> handleNonPresenteAlTavoloException(NonPresenteAlTavoloException ex,
+			WebRequest request) {
+
+		Map<String, Object> body = new LinkedHashMap<>();
+		body.put("timestamp", LocalDateTime.now());
+		body.put("message", ex.getMessage());
+		body.put("status", HttpStatus.UNPROCESSABLE_ENTITY);
+
+		return new ResponseEntity<>(body, HttpStatus.UNPROCESSABLE_ENTITY);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 }
