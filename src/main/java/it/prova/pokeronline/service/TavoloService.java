@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 
 import it.prova.pokeronline.dto.AbbandonaTavoloDTO;
 import it.prova.pokeronline.dto.AnalisiPartitaDTO;
+import it.prova.pokeronline.dto.LiberaTavoliDTO;
 import it.prova.pokeronline.dto.TavoloDTO;
 import it.prova.pokeronline.model.Tavolo;
 
@@ -44,6 +45,8 @@ public interface TavoloService {
 	List<TavoloDTO> estraiTavoliConUnUtenteAlDiSopraDiSoglia(Integer soglia);
 	
 	public TavoloDTO trovaTavoloConEsperienzaMassima();
+	
+	public String liberaTavoloDaUtenti(List<LiberaTavoliDTO> tavoli);
 	
 
 }

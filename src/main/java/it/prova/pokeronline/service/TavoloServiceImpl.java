@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.pokeronline.dto.AbbandonaTavoloDTO;
 import it.prova.pokeronline.dto.AnalisiPartitaDTO;
+import it.prova.pokeronline.dto.LiberaTavoliDTO;
 import it.prova.pokeronline.dto.TavoloDTO;
 import it.prova.pokeronline.model.Ruolo;
 import it.prova.pokeronline.model.Tavolo;
@@ -268,6 +269,13 @@ public class TavoloServiceImpl implements TavoloService {
 	@Override
 	public TavoloDTO trovaTavoloConEsperienzaMassima() {
 		return TavoloDTO.buildTavoloDTOFromModel(repository.trovaTavoloConMassimaEsperienzaGiocatori(), true);
+	}
+
+	@Override
+	public String liberaTavoloDaUtenti(List<LiberaTavoliDTO> tavoli) {
+       repository.svuotaTavoliCreatiDaUtenti(LiberaTavoliDTO.createListStringToDTO(tavoli));
+		
+		return "operazione eseguita";
 	}
  }
 
