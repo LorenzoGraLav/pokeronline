@@ -22,11 +22,9 @@ public class UtenteDTO {
 	private String cognome;
 	
 	@NotBlank(message = "{username.notblank}")
-	@Size(min = 3, max = 15, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri")
 	private String username;
 
 	@NotBlank(message = "{password.notblank}")
-	@Size(min = 8, max = 15, message = "Il valore inserito deve essere lungo tra {min} e {max} caratteri")
 	private String password;
 	
 	private LocalDate dataRegistrazione;
@@ -43,10 +41,9 @@ public class UtenteDTO {
 		
 	}
 
-	public UtenteDTO(Long id, @NotBlank(message = "{nome.notblank}") String nome,
-			@NotBlank(message = "{cognome.notblank}") String cognome,
-			@NotBlank(message = "{username.notblank}") @Size(min = 3, max = 15, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri") String username,
-			@NotBlank(message = "{password.notblank}") @Size(min = 8, max = 15, message = "Il valore inserito deve essere lungo tra {min} e {max} caratteri") String password,
+	public UtenteDTO(Long id,  String nome,
+			 String cognome,
+			 String username, String password,
 			Integer esperienzaAccumulata, Double creditoAccumulato, StatoUtente stato) {
 		super();
 		this.id = id;
@@ -63,7 +60,7 @@ public class UtenteDTO {
 
 	public UtenteDTO(Long id, @NotBlank(message = "{nome.notblank}") String nome,
 			@NotBlank(message = "{cognome.notblank}") String cognome,
-			@NotBlank(message = "{username.notblank}") @Size(min = 3, max = 15, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri") String username,StatoUtente stato) {
+			@NotBlank(message = "{username.notblank}") String username,StatoUtente stato) {
 		super();
 		this.id = id;
 		this.nome = nome;

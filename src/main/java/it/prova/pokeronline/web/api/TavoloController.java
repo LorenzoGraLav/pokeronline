@@ -2,6 +2,7 @@ package it.prova.pokeronline.web.api;
 
 import java.util.List;
 
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,6 +123,14 @@ public class TavoloController {
 	@GetMapping("/lastGame")
 	public TavoloDTO lastGame() {
 		return tavoloService.lastGame();
+	}
+	
+	@GetMapping("/soglia/{soglia}")
+	public List<TavoloDTO> estraiTavoliConUnUtenteAlDiSopraDiSoglia(@PathVariable Integer soglia) {
+		
+	    return tavoloService.estraiTavoliConUnUtenteAlDiSopraDiSoglia(soglia);
+	    
+	
 	}
 
 }

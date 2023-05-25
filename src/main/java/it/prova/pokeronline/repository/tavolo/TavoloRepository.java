@@ -39,4 +39,9 @@ public interface TavoloRepository
 			@Param("esperienzaminima") Integer esperienzaMinima, @Param("ciframinima") Double cifraMinima,
 			@Param("datacreazione") LocalDate dataCreazione, Pageable pageable);
 
+	@Query(value = "select t.* from tavolo t " + "where t.utente_id = :idInSessione and exists"
+			+ "(select * from tavolo_giocatori p inner join utente u " + "on p.giocatori_id = u.id where "
+			+ "p.tavolo_id = t.id and u.esperienzaaccumulata >= :soglia)", nativeQuery = true)
+	List<Tavolo> estraiTavoliConAlmenoUnUtenteAlDiSopraDiSoglia(@Param("idInSessione") Long idInSessione,
+			@Param("soglia") Integer soglia);
 }

@@ -21,7 +21,6 @@ public class GestioneUtenteDTO {
 	private String username;
 
 	@NotBlank(message = "{password.notblank}")
-	@Size(min = 8, max = 15, message = "Il valore inserito deve essere lungo tra {min} e {max} caratteri")
 	private String password;
 
 	private String confermaPassword;
@@ -31,6 +30,10 @@ public class GestioneUtenteDTO {
 
 	@NotBlank(message = "{cognome.notblank}")
 	private String cognome;
+	
+	private Integer esperienzaAccumulata;
+	
+	private Double cifraAccumulata;
 
 	private LocalDate dataRegistrazione;
 
@@ -110,6 +113,26 @@ public class GestioneUtenteDTO {
 		this.ruoliIds = ruoliIds;
 	}
 
+	public GestioneUtenteDTO(Long id,
+			@NotBlank(message = "{username.notblank}") @Size(min = 3, max = 15, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri") String username,
+			@NotBlank(message = "{password.notblank}") String password, String confermaPassword,
+			@NotBlank(message = "{nome.notblank}") String nome,
+			@NotBlank(message = "{cognome.notblank}") String cognome, Integer esperienzaAccumulata,
+			Double cifraAccumulata, LocalDate dataRegistrazione, StatoUtente stato, Long[] ruoliIds) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.confermaPassword = confermaPassword;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.esperienzaAccumulata = esperienzaAccumulata;
+		this.cifraAccumulata = cifraAccumulata;
+		this.dataRegistrazione = dataRegistrazione;
+		this.stato = stato;
+		this.ruoliIds = ruoliIds;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -181,10 +204,28 @@ public class GestioneUtenteDTO {
 	public void setRuoliIds(Long[] ruoliIds) {
 		this.ruoliIds = ruoliIds;
 	}
+	
+	
+
+	public Integer getEsperienzaAccumulata() {
+		return esperienzaAccumulata;
+	}
+
+	public void setEsperienzaAccumulata(Integer esperienzaAccumulata) {
+		this.esperienzaAccumulata = esperienzaAccumulata;
+	}
+
+	public Double getCifraAccumulata() {
+		return cifraAccumulata;
+	}
+
+	public void setCifraAccumulata(Double cifraAccumulata) {
+		this.cifraAccumulata = cifraAccumulata;
+	}
 
 	public Utente buildGestioneUtenteModel(boolean includeIdRoles) {
 		Utente result = new Utente(this.id, this.username, this.nome, this.cognome,
-				this.dataRegistrazione, this.stato);
+				this.dataRegistrazione, this.stato, this.cifraAccumulata, this.esperienzaAccumulata);
 		
 		if (includeIdRoles && ruoliIds != null)
 			result.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));

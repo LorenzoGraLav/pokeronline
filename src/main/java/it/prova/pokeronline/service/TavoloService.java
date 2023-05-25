@@ -2,6 +2,7 @@ package it.prova.pokeronline.service;
 
 import java.util.List;
 
+
 import org.springframework.data.domain.Page;
 
 import it.prova.pokeronline.dto.AbbandonaTavoloDTO;
@@ -40,6 +41,9 @@ public interface TavoloService {
 	public AbbandonaTavoloDTO abbandona(Long idTavolo);
 	
 	public TavoloDTO lastGame();
+	
+	List<TavoloDTO> estraiTavoliConUnUtenteAlDiSopraDiSoglia(Integer soglia);
+
 	
 
 }
